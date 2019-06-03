@@ -21,7 +21,7 @@ defmodule X509.Certificate do
             :AlgorithmIdentifier,
             Record.extract(:AlgorithmIdentifier, from_lib: "public_key/include/public_key.hrl")
 
-  defrecord :validity,
+  defrecord :erl_validity,
             :Validity,
             Record.extract(:Validity, from_lib: "public_key/include/public_key.hrl")
 
@@ -113,6 +113,24 @@ defmodule X509.Certificate do
 
   def parse_public_key([{:sequence, [{:int, n}, {:int, e}]}], :rsa_pkcs1),
     do: %{n: n, e: e}
+
+  def validity(%__MODULE__{record: record}) do
+    record
+    |> certificate(:tbsCertificate)
+    |> tbs_certificate(:validity)
+    |> parse_validity()
+  end
+
+  def parse_validity(validity),
+  do: {
+    erl_validity(validity, :notBefore) |> parse_time(),
+    erl_validity(validity, :notAfter) |> parse_time()
+  }
+
+  def parse_time({:utcTime, ans1_time}),
+    do: Timex.parse!(to_string(ans1_time), "{ASN1:UTCtime}")
+  def parse_time({:generalTime, ans1_time}),
+    do: Timex.parse!(to_string(ans1_time), "{ASN1:GeneralizedTime:Z}")
 
   def issuer_common_name(%__MODULE__{record: record}),
     do:

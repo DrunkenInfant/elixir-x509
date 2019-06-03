@@ -25,6 +25,8 @@ defmodule X509.MixProject do
 
   # Run "mix help deps" to learn about dependencies.
   defp deps do
-    []
+    [
+      {:timex, "~> 3.5"}
+    ]
   end
 end
