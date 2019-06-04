@@ -30,15 +30,8 @@ defmodule X509.ASN1 do
     {:int, num}
   end
 
-  def format_value(:bit_string, val) do
-    # Reverse bits in each byte and reverse all bytes
-    bitlist =
-      val
-      |> :binary.bin_to_list()
-      |> Enum.map(&byte_as_bitlist(<<&1::size(8)>>))
-      |> Enum.reduce([], &Kernel.++/2)
-
-    {:bit_string, bitlist}
+  def format_value(:oid, val) do
+    {:oid, X509.OID.parse(val)}
   end
 
   def format_value(tag, val), do: {tag, val}
@@ -77,7 +70,4 @@ defmodule X509.ASN1 do
   def tag_name(0, 28), do: :universal_string
   def tag_name(0, 29), do: :char_string
   def tag_name(0, 30), do: :bmp_string
-
-  def byte_as_bitlist(<<b::size(1), rest::bitstring>>), do: [b | byte_as_bitlist(rest)]
-  def byte_as_bitlist(<<>>), do: []
 end

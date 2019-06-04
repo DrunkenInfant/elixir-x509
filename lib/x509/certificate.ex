@@ -97,22 +97,18 @@ defmodule X509.Certificate do
       spki
       |> subject_public_key_info(:algorithm)
       |> algorithm_identifier(:algorithm)
-      |> translate_algorithm()
+      |> X509.OID.translate_algorithm()
 
     key =
       spki
       |> subject_public_key_info(:subjectPublicKey)
-      |> X509.ASN1.parse()
-      |> parse_public_key(alg)
+      |> X509.PKCS.RSA.parse_public_key()
 
     {
       alg,
       key
     }
   end
-
-  def parse_public_key([{:sequence, [{:int, n}, {:int, e}]}], :rsa_pkcs1),
-    do: %{n: n, e: e}
 
   def validity(%__MODULE__{record: record}) do
     record
@@ -170,6 +166,7 @@ defmodule X509.Certificate do
 
       {:bit_string, usages} ->
         usages
+        |> X509.Utils.bin_as_bitlist()
         |> Enum.with_index()
         |> Enum.reduce([], fn
           {0, _}, acc -> acc
@@ -203,17 +200,9 @@ defmodule X509.Certificate do
         nil
 
       {:sequence, ext_ku} ->
-        Enum.map(ext_ku, fn {:oid, oid} -> translate_extended_key_usage(oid) end)
+        Enum.map(ext_ku, fn {:oid, oid} -> X509.OID.translate_extended_key_usage(oid) end)
     end
   end
-
-  def translate_extended_key_usage(<<2, 5, 29, 37, 0>>), do: :any
-  def translate_extended_key_usage(<<43, 6, 1, 5, 5, 7, 3, 1>>), do: :serverAuth
-  def translate_extended_key_usage(<<43, 6, 1, 5, 5, 7, 3, 2>>), do: :clientAuth
-  def translate_extended_key_usage(<<43, 6, 1, 5, 5, 7, 3, 3>>), do: :codeSigning
-  def translate_extended_key_usage(<<43, 6, 1, 5, 5, 7, 3, 4>>), do: :emailProtection
-  def translate_extended_key_usage(<<43, 6, 1, 5, 5, 7, 3, 8>>), do: :timeStamping
-  def translate_extended_key_usage(<<43, 6, 1, 5, 5, 7, 3, 9>>), do: :OCSPSigning
 
   def alg(%__MODULE__{record: record}) do
     record
@@ -221,17 +210,8 @@ defmodule X509.Certificate do
     |> tbs_certificate(:subjectPublicKeyInfo)
     |> subject_public_key_info(:algorithm)
     |> algorithm_identifier(:algorithm)
-    |> translate_algorithm()
+    |> X509.OID.translate_algorithm()
   end
-
-  def translate_algorithm({1, 2, 840, 113_549, 1, 1, 5}), do: {:rsa_pkcs1, :sha1}
-  def translate_algorithm({1, 2, 840, 113_549, 1, 1, 1}), do: {:rsa_pkcs1, :any}
-  def translate_algorithm({1, 2, 840, 113_549, 1, 1, 11}), do: {:rsa_pkcs1, :sha256}
-  def translate_algorithm({1, 2, 840, 113_549, 1, 1, 14}), do: {:rsa_pkcs1, :sha224}
-  def translate_algorithm({1, 2, 840, 113_549, 1, 1, 12}), do: {:rsa_pkcs1, :sha384}
-  def translate_algorithm({1, 2, 840, 113_549, 1, 1, 13}), do: {:rsa_pkcs1, :sha512}
-  def translate_algorithm({1, 2, 840, 113_549, 1, 1, 2}), do: {:rsa_pkcs1, :md2}
-  def translate_algorithm({1, 2, 840, 113_549, 1, 1, 4}), do: {:rsa_pkcs1, :md5}
 
   defp extensions_find(%__MODULE__{record: record}, oid),
     do:

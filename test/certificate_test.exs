@@ -16,4 +16,9 @@ defmodule X509.CertificateTest do
     cert = X509.Certificate.from_pem(X509.CertificateHelper.x509_public())
     assert [:digitalSignature, :keyEncipherment, :keyAgreement] == X509.Certificate.usage(cert)
   end
+
+  test "parse extended key usage" do
+    cert = X509.Certificate.from_pem(X509.CertificateHelper.x509_public())
+    assert [:clientAuth] == X509.Certificate.extended_key_usage(cert)
+  end
 end
