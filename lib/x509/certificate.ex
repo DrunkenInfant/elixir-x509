@@ -118,13 +118,14 @@ defmodule X509.Certificate do
   end
 
   def parse_validity(validity),
-  do: {
-    erl_validity(validity, :notBefore) |> parse_time(),
-    erl_validity(validity, :notAfter) |> parse_time()
-  }
+    do: {
+      erl_validity(validity, :notBefore) |> parse_time(),
+      erl_validity(validity, :notAfter) |> parse_time()
+    }
 
   def parse_time({:utcTime, ans1_time}),
     do: Timex.parse!(to_string(ans1_time), "{ASN1:UTCtime}")
+
   def parse_time({:generalTime, ans1_time}),
     do: Timex.parse!(to_string(ans1_time), "{ASN1:GeneralizedTime:Z}")
 

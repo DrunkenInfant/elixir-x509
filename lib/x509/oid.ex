@@ -46,11 +46,14 @@ defmodule X509.OID do
   def parse(<<v::size(8), rest::binary>>) do
     first = div(v, 40)
     sec = rem(v, 40)
-    start = case first do
-      0 -> [sec]
-      _ -> [first, sec]
-    end
-    start ++ parse_next(rest) |> Enum.reduce({}, &Tuple.append(&2, &1))
+
+    start =
+      case first do
+        0 -> [sec]
+        _ -> [first, sec]
+      end
+
+    (start ++ parse_next(rest)) |> Enum.reduce({}, &Tuple.append(&2, &1))
   end
 
   def parse_next(<<>>), do: []

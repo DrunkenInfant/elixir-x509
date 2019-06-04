@@ -23,29 +23,39 @@ defmodule X509.JWKTest do
 
   test "from rsa private key" do
     assert %{
-     "d" => "oCJ2jgRa0vvYMYXowFYDfQu_J82_9btquHSFeHOrwRe7PBFquXpuR6mntXPw2esXXvPZfCQUZmTL3PbPmJB1bdrWrNfSbV-bSCljdu6gvfEnZytNkBkObr4BastjYDlL8IHlOCKun2TYLTlKDdhrScmyPXdDQx32s1lay9yACuxt4XWTsOUBD3cU1gjX3bv9hrTv8UdIngCmSLMaz7Zy1ZgFbfdKqODfDhFxkTiJXOMDI8WGbgG9IGBcHbPLuXVA0QHOQMy5giCuDw55yCocYIGrVrJH7kItBxKnspm97kRZPQYmL6Vq13R1_KffKVT6a7GMX_vN9QMkzHz7KiX9yQ",
-     "dp" => "Yog6YfRcZcrKTdvg14GUEQXUv9BAaApSPO9NZevbQB-Cd3RzPEexHpXU1-cdFr1Z2WJncI2Oz77vWDkPaMY6xyeZWtnXOpXDBEv-VROZjojPCnU5ZEiXM2cqU1_XrW0sQXHZriESLdMnCRON2SvmCeEW6IxEGrGItxB6zjs0JAE",
-     "dq" => "sIGVpejXZdbH-OXyjRio7PE2Zb2usbj0Ck-M_PtYWKJ6gWdoYTPMK6FGwF90MVaonx4JnXExEqYk1184HBFhfXd7AGsw4GPE3eTqMfjGkd0IMaAP-Sgp2sBBv1WlDpi8OL2gaGAkxum8Mr3_Aa4vikAI4WYdq0xIJy3CqGpILo8",
-     "e" => "AQAB",
-     "kty" => "RSA",
-     "n" => "v-Q-7ncTQjHnPqdQN32EF_smzohLsjhea98Et9mjA5Gu9Hb7PAJW27C9s3dxR8ox73kU2AAKPArGyPFA1z6A1kWDVDS9hgk-OKtfj5g7yVFh_FCWvTPcjkMiJobwrYM80Tk7PHiqlGO8xigEkH_1-X-MZeGDLEzxXoB2NNMf0oenf_0C3c0u3jCyfGl-Cd-ZjsugoHkiDtKOKK8feEfrjHD9mInNZnhwPi6qKWKfFoTTqvJ5Elf4-Dv1XUVGvLKBhBqHItmqhUrckY82kIuRc8SWQuLBikYEc5ync_TD0Oj_PxRetcxW0tNhF3dOA1f3Ley4n62UKw4g2Wyc9i0VUw",
-     "p" => "3zoGmnd9ZksvyxlVaRVXYschd0P3b6uPWzMQnNNEWpK2ky0fA-tyLfAHxH7FFA6W2ycWQZoMJzOIIlcBbqJMAyLWHDSMpBReP5EDsN3dL-EcfTS05fbl6VSnCATpdmojhxAZNA9LdZG9-_zN_RzgwlQc-GHPowX6IRKQslGUGWU",
-     "q" => "3BB9ucFT0Fxnz4-dDZu2uLxQ792Ub0qL4I5mbA0O-cPtYD0jkdt4gmQX6SjyOeaO3rS3O34xeGazEE96fuT5K9nM_UxJooF79WRIK5y1tXSTywiLkLUvRPUHqyOtA32rMr3Qs3VXp0ck01suy7mBaDvmFAfskLE2dduDD87pZFc",
-     "qi" => "B14L0yk3t3JXhZ1xC6Bl-s0ZOM4tx-zpLbuyX5bhSo85-rXz7wci4R-7BGm3m4Q9hlTgDzK1dBM3Y1_0iUUIfBFFGRBOfcqr5-DjvrohGYRRaRhRdzNl5ehuK4nmKpv2ailK2QGz8vKgBRexXsgr1oBLHgc6x6Ieo39DYFj4QkY"
-    } == X509.CertificateHelper.rsa_private_key()
-         |> X509.parse_pem()
-         |> List.first()
-         |> X509.JWK.to_jwk()
+             "d" =>
+               "oCJ2jgRa0vvYMYXowFYDfQu_J82_9btquHSFeHOrwRe7PBFquXpuR6mntXPw2esXXvPZfCQUZmTL3PbPmJB1bdrWrNfSbV-bSCljdu6gvfEnZytNkBkObr4BastjYDlL8IHlOCKun2TYLTlKDdhrScmyPXdDQx32s1lay9yACuxt4XWTsOUBD3cU1gjX3bv9hrTv8UdIngCmSLMaz7Zy1ZgFbfdKqODfDhFxkTiJXOMDI8WGbgG9IGBcHbPLuXVA0QHOQMy5giCuDw55yCocYIGrVrJH7kItBxKnspm97kRZPQYmL6Vq13R1_KffKVT6a7GMX_vN9QMkzHz7KiX9yQ",
+             "dp" =>
+               "Yog6YfRcZcrKTdvg14GUEQXUv9BAaApSPO9NZevbQB-Cd3RzPEexHpXU1-cdFr1Z2WJncI2Oz77vWDkPaMY6xyeZWtnXOpXDBEv-VROZjojPCnU5ZEiXM2cqU1_XrW0sQXHZriESLdMnCRON2SvmCeEW6IxEGrGItxB6zjs0JAE",
+             "dq" =>
+               "sIGVpejXZdbH-OXyjRio7PE2Zb2usbj0Ck-M_PtYWKJ6gWdoYTPMK6FGwF90MVaonx4JnXExEqYk1184HBFhfXd7AGsw4GPE3eTqMfjGkd0IMaAP-Sgp2sBBv1WlDpi8OL2gaGAkxum8Mr3_Aa4vikAI4WYdq0xIJy3CqGpILo8",
+             "e" => "AQAB",
+             "kty" => "RSA",
+             "n" =>
+               "v-Q-7ncTQjHnPqdQN32EF_smzohLsjhea98Et9mjA5Gu9Hb7PAJW27C9s3dxR8ox73kU2AAKPArGyPFA1z6A1kWDVDS9hgk-OKtfj5g7yVFh_FCWvTPcjkMiJobwrYM80Tk7PHiqlGO8xigEkH_1-X-MZeGDLEzxXoB2NNMf0oenf_0C3c0u3jCyfGl-Cd-ZjsugoHkiDtKOKK8feEfrjHD9mInNZnhwPi6qKWKfFoTTqvJ5Elf4-Dv1XUVGvLKBhBqHItmqhUrckY82kIuRc8SWQuLBikYEc5ync_TD0Oj_PxRetcxW0tNhF3dOA1f3Ley4n62UKw4g2Wyc9i0VUw",
+             "p" =>
+               "3zoGmnd9ZksvyxlVaRVXYschd0P3b6uPWzMQnNNEWpK2ky0fA-tyLfAHxH7FFA6W2ycWQZoMJzOIIlcBbqJMAyLWHDSMpBReP5EDsN3dL-EcfTS05fbl6VSnCATpdmojhxAZNA9LdZG9-_zN_RzgwlQc-GHPowX6IRKQslGUGWU",
+             "q" =>
+               "3BB9ucFT0Fxnz4-dDZu2uLxQ792Ub0qL4I5mbA0O-cPtYD0jkdt4gmQX6SjyOeaO3rS3O34xeGazEE96fuT5K9nM_UxJooF79WRIK5y1tXSTywiLkLUvRPUHqyOtA32rMr3Qs3VXp0ck01suy7mBaDvmFAfskLE2dduDD87pZFc",
+             "qi" =>
+               "B14L0yk3t3JXhZ1xC6Bl-s0ZOM4tx-zpLbuyX5bhSo85-rXz7wci4R-7BGm3m4Q9hlTgDzK1dBM3Y1_0iUUIfBFFGRBOfcqr5-DjvrohGYRRaRhRdzNl5ehuK4nmKpv2ailK2QGz8vKgBRexXsgr1oBLHgc6x6Ieo39DYFj4QkY"
+           } ==
+             X509.CertificateHelper.rsa_private_key()
+             |> X509.parse_pem()
+             |> List.first()
+             |> X509.JWK.to_jwk()
   end
 
   test "from public key" do
     assert %{
-     "e" => "AQAB",
-     "kty" => "RSA",
-     "n" => "v-Q-7ncTQjHnPqdQN32EF_smzohLsjhea98Et9mjA5Gu9Hb7PAJW27C9s3dxR8ox73kU2AAKPArGyPFA1z6A1kWDVDS9hgk-OKtfj5g7yVFh_FCWvTPcjkMiJobwrYM80Tk7PHiqlGO8xigEkH_1-X-MZeGDLEzxXoB2NNMf0oenf_0C3c0u3jCyfGl-Cd-ZjsugoHkiDtKOKK8feEfrjHD9mInNZnhwPi6qKWKfFoTTqvJ5Elf4-Dv1XUVGvLKBhBqHItmqhUrckY82kIuRc8SWQuLBikYEc5ync_TD0Oj_PxRetcxW0tNhF3dOA1f3Ley4n62UKw4g2Wyc9i0VUw",
-    } == X509.CertificateHelper.public_key()
-         |> X509.parse_pem()
-         |> List.first()
-         |> X509.JWK.to_jwk()
+             "e" => "AQAB",
+             "kty" => "RSA",
+             "n" =>
+               "v-Q-7ncTQjHnPqdQN32EF_smzohLsjhea98Et9mjA5Gu9Hb7PAJW27C9s3dxR8ox73kU2AAKPArGyPFA1z6A1kWDVDS9hgk-OKtfj5g7yVFh_FCWvTPcjkMiJobwrYM80Tk7PHiqlGO8xigEkH_1-X-MZeGDLEzxXoB2NNMf0oenf_0C3c0u3jCyfGl-Cd-ZjsugoHkiDtKOKK8feEfrjHD9mInNZnhwPi6qKWKfFoTTqvJ5Elf4-Dv1XUVGvLKBhBqHItmqhUrckY82kIuRc8SWQuLBikYEc5ync_TD0Oj_PxRetcxW0tNhF3dOA1f3Ley4n62UKw4g2Wyc9i0VUw"
+           } ==
+             X509.CertificateHelper.public_key()
+             |> X509.parse_pem()
+             |> List.first()
+             |> X509.JWK.to_jwk()
   end
 end
