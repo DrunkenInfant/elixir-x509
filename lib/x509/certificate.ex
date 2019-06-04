@@ -93,7 +93,7 @@ defmodule X509.Certificate do
       |> certificate(:tbsCertificate)
       |> tbs_certificate(:subjectPublicKeyInfo)
 
-    {alg, _hash} =
+    alg =
       spki
       |> subject_public_key_info(:algorithm)
       |> algorithm_identifier(:algorithm)

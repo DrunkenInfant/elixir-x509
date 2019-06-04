@@ -6,7 +6,7 @@ defmodule X509.JWK do
                     :cRLSign
                   ])
 
-  def to_jwk(cert) do
+  def to_jwk(%X509.Certificate{} = cert) do
     x5t = X509.Certificate.thumbprint(cert, :sha) |> Base.encode64()
     x5t256 = X509.Certificate.thumbprint(cert, :sha256) |> Base.encode64()
     alg = X509.Certificate.alg(cert) |> jwk_alg()
@@ -27,6 +27,14 @@ defmodule X509.JWK do
     |> Map.put("x5c", X509.Certificate.b64(cert))
   end
 
+  def to_jwk({:rsa_private_key, key_params}) do
+    key_params
+    |> Enum.into(%{}, fn {k, v} -> {to_string(k), X509.JWK.int_to_b64(v)} end)
+    |> Map.put("kty", "RSA")
+  end
+
+  def to_jwk({:public_key, public_key}), do: jwk_public_key(public_key)
+
   def jwk_usage(usages) do
     case MapSet.disjoint?(MapSet.new(usages), @signing_usages) do
       true -> "enc"
@@ -40,7 +48,8 @@ defmodule X509.JWK do
       {:rsa_pkcs1, :sha224} -> "RS224"
       {:rsa_pkcs1, :sha384} -> "RS384"
       {:rsa_pkcs1, :sha512} -> "RS512"
-      {:rsa_pkcs1, hash} when hash in [:any, :sha1, :md2, :md5] -> "RS256"
+      {:rsa_pkcs1, hash} when hash in [:sha1, :md2, :md5] -> "RS256"
+      :rsa_pkcs1 -> "RS256"
     end
   end
 

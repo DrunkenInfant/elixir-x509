@@ -26,8 +26,8 @@ defmodule X509.OID do
 
   def at_common_name, do: {2, 5, 4, 3}
 
+  def translate_algorithm({1, 2, 840, 113_549, 1, 1, 1}), do: :rsa_pkcs1
   def translate_algorithm({1, 2, 840, 113_549, 1, 1, 5}), do: {:rsa_pkcs1, :sha1}
-  def translate_algorithm({1, 2, 840, 113_549, 1, 1, 1}), do: {:rsa_pkcs1, :any}
   def translate_algorithm({1, 2, 840, 113_549, 1, 1, 11}), do: {:rsa_pkcs1, :sha256}
   def translate_algorithm({1, 2, 840, 113_549, 1, 1, 14}), do: {:rsa_pkcs1, :sha224}
   def translate_algorithm({1, 2, 840, 113_549, 1, 1, 12}), do: {:rsa_pkcs1, :sha384}
