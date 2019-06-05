@@ -16,11 +16,14 @@ defmodule X509.JWK do
 
     usage = X509.Certificate.usage(cert) |> jwk_usage()
     public_key = X509.Certificate.public_key(cert) |> jwk_public_key()
+    {nbf, exp} = X509.Certificate.validity(cert)
 
     %{}
     |> Map.merge(public_key)
     |> Map.put("alg", alg)
     |> Map.put("use", usage)
+    |> Map.put("exp", DateTime.to_unix(exp, :second))
+    |> Map.put("nbf", DateTime.to_unix(nbf, :second))
     |> Map.put("kid", "#{issuer}/#{serial}")
     |> Map.put("x5t", x5t)
     |> Map.put("x5t#S256", x5t256)
