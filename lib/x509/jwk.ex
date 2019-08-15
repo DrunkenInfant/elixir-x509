@@ -38,6 +38,12 @@ defmodule X509.JWK do
     |> Map.put("kty", "RSA")
   end
 
+  def to_jwk({:private_key, key_params}) do
+    key_params
+    |> Enum.into(%{}, fn {k, v} -> {to_string(k), X509.JWK.int_to_b64(v)} end)
+    |> Map.put("kty", "RSA")
+  end
+
   def to_jwk({:public_key, public_key}), do: jwk_public_key(public_key)
 
   def jwk_usage(nil), do: "enc"

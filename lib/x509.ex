@@ -14,6 +14,10 @@ defmodule X509 do
     {:rsa_private_key, X509.PKCS.RSA.parse_private_key(der)}
   end
 
+  def parse_der("PRIVATE KEY", der) do
+    X509.PKCS.parse_private_key(der)
+  end
+
   def parse_der("PUBLIC KEY", der) do
     {:public_key, X509.PKCS.RSA.parse_public_key(der)}
   end
