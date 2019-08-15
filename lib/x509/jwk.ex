@@ -6,6 +6,8 @@ defmodule X509.JWK do
                     :cRLSign
                   ])
 
+  def to_jwk({:certificate, %X509.Certificate{} = cert}), do: to_jwk(cert)
+
   def to_jwk(%X509.Certificate{} = cert) do
     x5t = X509.Certificate.thumbprint(cert, :sha) |> Base.encode64()
     x5t256 = X509.Certificate.thumbprint(cert, :sha256) |> Base.encode64()
@@ -37,6 +39,8 @@ defmodule X509.JWK do
   end
 
   def to_jwk({:public_key, public_key}), do: jwk_public_key(public_key)
+
+  def jwk_usage(nil), do: "enc"
 
   def jwk_usage(usages) do
     case MapSet.disjoint?(MapSet.new(usages), @signing_usages) do

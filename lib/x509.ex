@@ -17,4 +17,8 @@ defmodule X509 do
   def parse_der("PUBLIC KEY", der) do
     {:public_key, X509.PKCS.RSA.parse_public_key(der)}
   end
+
+  def parse_der("CERTIFICATE", der) do
+    {:certificate, X509.Certificate.from_der([der])}
+  end
 end

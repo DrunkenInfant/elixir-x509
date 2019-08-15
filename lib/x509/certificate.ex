@@ -221,6 +221,9 @@ defmodule X509.Certificate do
       |> tbs_certificate(:extensions)
       |> extensions_find(oid)
 
+  defp extensions_find(:asn1_NOVALUE, _oid),
+    do: nil
+
   defp extensions_find([], _oid),
     do: nil
 
